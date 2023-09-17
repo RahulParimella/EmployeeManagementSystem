@@ -18,7 +18,6 @@ import com.example.demo.dto.EmployeeResponse;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.utils.AppConstants;
 
-
 import jakarta.validation.Valid;
 
 @RestController
@@ -28,12 +27,12 @@ public class EmployeeController {
 		@Autowired
 		private EmployeeService empService;
 		
-		@PostMapping("/employees")
-		public EmployeeDto addEmployee(@RequestBody @Valid EmployeeDto employee){
-			return empService.saveEmployee(employee);
-		
-			
-		}
+	
+		 @PostMapping("/employee")
+		    public ResponseEntity<EmployeeDto> addEmployee(@Valid @RequestBody EmployeeDto employeedto){
+		        return new ResponseEntity<>(empService.saveEmployee(employeedto), HttpStatus.CREATED);
+		    }
+
 
 		@GetMapping
 	    public EmployeeResponse getAllEmployees(
@@ -45,20 +44,19 @@ public class EmployeeController {
 	        return empService.getAllEmployees(pageNo, pageSize, sortBy, sortDir);
 	    }
 		
-		@GetMapping("/employees/{id}")
-		public EmployeeDto findById(@PathVariable int id)
-		{
-			return empService.getEmployeeById(id);
-			
-		}
+
 		
+		 @GetMapping("/{id}")
+		    public ResponseEntity<EmployeeDto> findById(@PathVariable(name = "id") long id){
+		        return ResponseEntity.ok(empService.getEmployeeById(id));
+		    }
 		
 		 @DeleteMapping("/{id}")
 		    public ResponseEntity<String> deleteEmployee(@PathVariable(name = "id") long id){
 
 			 empService.deleteEmployee(id);
 
-		        return new ResponseEntity<>("Post entity deleted successfully.", HttpStatus.OK);
+		        return new ResponseEntity<>("Employee entity deleted successfully.", HttpStatus.OK);
 		    }
 		 
 		  @PutMapping("/{id}")
